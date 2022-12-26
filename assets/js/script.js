@@ -8,16 +8,17 @@ document.addEventListener("DOMContentLoaded",function() {
         button.addEventListener("click",function(){
             if (this.getAttribute("data-type")==="submit"){
                 alert("You clicked Submit!");
-           } else {
+            } else {
                 let gameType = this.getAttribute("data-type");
                 alert(`You clicked ${gameType}`);
-           }
+            }
         })
     }    
 })
 
 function runGame() {
-
+    let num1=Math.floor(Math.random()*25)+1;
+    let Num2=Math.floor(Math.random()*25)+1;
 }
 
 function checkAnswer() {
