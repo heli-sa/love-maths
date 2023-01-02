@@ -12,11 +12,17 @@ document.addEventListener("DOMContentLoaded",function() {
                 let gameType = this.getAttribute("data-type");
                 runGame(gameType);
             }
-        })
+        });
     }  
+
+    document.getElementById("answer-box").addEventListener("keydown", function(event){
+        if(event.key==="Enter"){
+            checkAnswer();
+        }
+    });    
     
     runGame("addition");
-})
+});
 
 /**
  * The main game "loop" , called when the script is first loaded
@@ -24,18 +30,27 @@ document.addEventListener("DOMContentLoaded",function() {
 */
 
 function runGame(gameType) {
+     document.getElementById("answer-box").value="";
+     document.getElementById("answer-box").focus();
+
+
+
     //Creates two random numbers between 1 and 25
     let num1 =Math.floor(Math.random() * 25) + 1;
     let num2 =Math.floor(Math.random() * 25) + 1;
 
     if (gameType === "addition"){
         displayAdditionQuestion(num1, num2);
+    }else if(gameType === "multiply") {
+        displayMultiplyQuestion(num1, num2);
+    } else if (gameType === "subtract" ) {
+        displaySubtractQuestion(num1, num2);
 } else {
     alert(`Unknown game type: ${gameType}`);
     throw`Unknown game type: ${gameType}.Aborting!`;
     }
 
-
+}
     function newFunction() {
         runGame();
     }
@@ -49,11 +64,13 @@ function checkAnswer() {
 
     if(isCorrect){
         alert("Hey! You got it right! :D");
+        incrementScore();
     }else{
         alert(`awww...you answered ${userAnswer}. The correct answer was${calculatedAnswer[0]}!`);
+        incrementWrongAnswer();
     }
 
-    runGame
+    runGame(calculatedAnswer[1]);
 
 }    
 /** Gets the operands(numbers) and the operator 
@@ -69,19 +86,30 @@ function calculateCorrectAnswer() {
 
     if (operator==="+") {
         return[operand1+operand2,"addition"];
-    }else {
+      }  else if (operator === "x") {
+        return[operand1 * operand2, "multiply"]
+    } else if (operator === "-") {
+        return [operand1 - operand2, "subtract"];
+    } else {
             alert(`Unimplemented operator ${operator}`);
             throw`Unimplemented operator ${operator}. Aborting!`
         }
     }
-
+/**Gets the current score from the DOM and increments it by 1*/
 
 
 function incrementScore() {
+    let oldScore= parseInt(document.getElementById("incorrect").innerText);
+    document.getElementById("incorrect").innertext= ++oldScore;
 
 }
 
+/**Gets the current tally of the incorrect score from the DOM and increments it by 1*/
+
 function incrementWrongAnswer() {
+    let oldScore= parseInt(document.getElementById("incorrect").innerText);
+    document.getElementById("incorrect").innerText= ++oldScore;
+    
 
 }
 
@@ -93,10 +121,17 @@ function displayAdditionQuestion(operand1, operand2) {
 }
 
 
-function subtractQuestion() {
+function displaySubtractQuestion() {
+
+    document.getElementById("operand1").textContent = operand1 > operand2 ? operand1 : operand2;
+    document.getElementById("operand2").textContent = operand1 > operand2 ? operand2 : operand1;
+    document.getElementById('operator').textContent = "-";
 
 }
 
-function displayMultiplyQuestion() {
+function displayMultiplyQuestion(operand1, operand2) {
+    document.getElementById('operand1').textContent= operand1;
+    document.getElementById('operand2').textContent= operand2;
+    document.getElementById('operator').textContent= "x";
 
 }
